@@ -16,8 +16,8 @@
 import requests
 import argparse
 
-_PROJECT_ALL = '/api/v3/projects/all'
-_PROJECT_OWN = '/api/v3/projects'
+_PROJECT_ALL = '/api/v3/projects/all?page=%s&per_page=100'
+_PROJECT_OWN = '/api/v3/projects?page=%s&per_page=100'
 _PROJECT_LABELS = '/api/v3/projects/%s/labels'
 _PROJECT_INFO = '/api/v3/projects/%s'
 _USER_INFO = '/api/v3/users/%s'
@@ -34,9 +34,17 @@ def check_label(gitlab_host, token, is_admin=False):
         url = 'http://%s%s' % (gitlab_host, _PROJECT_ALL)
     else:
         url = 'http://%s%s' % (gitlab_host, _PROJECT_OWN)
-    print url
-    r = requests.get(url, headers=headers)
-    print r.json()
+    i = 1
+    all_project_list = []
+    while True:
+
+        project_list_per_page = requests.get(url % i, headers=headers)
+        if not len(project_list_per_page.json()):
+            break
+        i += 1
+        all_project_list.extend(project_list_per_page.json())
+
+    print len(all_project_list)
 
 
 def main():
