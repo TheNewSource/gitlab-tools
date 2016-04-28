@@ -23,7 +23,7 @@ _PROJECT_INFO = '/api/v3/projects/%s'
 _USER_INFO = '/api/v3/users/%s'
 
 
-def check_label(gitlab_host, token, is_admin=False):
+def get_all_projects(gitlab_host, token, is_admin=False):
     headers = {
         'content-type': 'application/json',
         'PRIVATE-TOKEN': token
@@ -53,7 +53,7 @@ def main():
     parser.add_argument('--token', type=str, help='gitlab token for user', required=True)
     parser.add_argument('--admin', type=bool, help='token belong to admin or not', default=False)
     args = parser.parse_args()
-    check_label(args.host, args.token, args.admin)
+    get_all_projects(args.host, args.token, args.admin)
 
 
 if __name__ == '__main__':
